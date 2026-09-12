@@ -5,24 +5,9 @@ import matplotlib.pyplot as plt
 import torch.nn as nn
 from torch.utils.data import DataLoader
 import torch.optim as optim
+from model import ImageRecog
 
 
-class ImageRecog(nn.Module):
-    def __init__(self):
-        super().__init__()
-        
-        self.network = nn.Sequential(
-            nn.Linear(784, 128),
-            nn.ReLU(),
-            
-            nn.Linear(128, 64),
-            nn.ReLU(),
-            
-            nn.Linear(64, 10)
-        )
-    
-    def forward(self, x):
-        return self.network(x)
     
 model = ImageRecog()
 
@@ -55,7 +40,7 @@ with torch.no_grad():
     predictions = model(images)
     
 predicted_digits = predictions.argmax(dim=-1)
-
+'''
 for i in range(10):
     
     plt.figure()
@@ -68,4 +53,4 @@ for i in range(10):
     plt.title(f"Actual: {actual}\n Predicted: {predicted}")
     plt.show()
 
-
+'''
