@@ -26,26 +26,11 @@ class ImageRecog(nn.Module):
     
 model = ImageRecog()
 
-loss_function = nn.CrossEntropyLoss()
+state_dict = torch.load('model_weights.pth')
 
-optimizer = optim.Adam(
-    model.parameters(),
-    lr=0.001
-)
-    
-dataset = datasets.MNIST(
-    root="datasets",
-    train=True,
-    download=True,
-    transform=ToTensor()
-)
+model.load_state_dict(state_dict)
 
-train_loader = DataLoader(
-    dataset,
-    batch_size = 64,
-    shuffle=True
-)
-
+model.eval()
 
 test_dataset = datasets.MNIST(
     root="datasets",
@@ -59,50 +44,6 @@ test_loader = DataLoader(
     batch_size=64,
     shuffle=False
 )
-
-image, label = dataset[0]
-images, labels = next(iter(train_loader))
-
-
-for epoch in range(5):
-    total_loss = 0
-    for images, labels in train_loader:
-        images = images.view(images.size(0), -1)
-        prediction = model(images)
-        
-        loss = loss_function(prediction, labels) #how
-        optimizer.zero_grad() #Which
-        loss.backward() #How
-
-        optimizer.step() #Do
-        
-        total_loss += loss.item()
-        
-    average_loss = total_loss / len(train_loader)
-    
-    print(f"Epoch: {epoch + 1}/5 Total loss: {total_loss}, Average loss: {average_loss}")
-
-
-correct = 0
-total = 0
-
-model.eval()
-
-with torch.no_grad():
-    for images, labels in test_loader:
-        images = images.view(images.size(0), -1)
-        prediction = model(images)
-        
-        predicted_digits=prediction.argmax(dim=1)
-        
-        correct += (predicted_digits == labels).sum().item()
-        total += labels.size(0)
-        
-    accuracy = correct / total * 100
-    print(f"Test accuracy: ", accuracy)
-
-
-model.eval()
 
 images, labels = next(iter(test_loader))
 
@@ -127,8 +68,4 @@ for i in range(10):
     plt.title(f"Actual: {actual}\n Predicted: {predicted}")
     plt.show()
 
-'''
-for epoch in range(1000):
-    prediction(model())
-'''
 
