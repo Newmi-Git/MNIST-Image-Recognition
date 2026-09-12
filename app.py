@@ -31,9 +31,26 @@ def preprocess(image):
     padded = Image.new("L", (size, size), 0)
     padded.paste(image, ((size - w) // 2, (size - h) // 2))
 
-    image = padded.resize((28, 28))
+    border = size // 5
+    bordered = Image.new("L", (size + border * 2, size + border * 2), 0)
+    bordered.paste(padded, (border, border))
+
+    image = bordered.resize((28, 28))
 
     arr = np.array(image, dtype=np.float32) / 255.0
+
+    # nudge the digit so its "center of mass" (not just its box)
+    # lands in the middle of the frame
+    total = arr.sum()
+    if total > 0:
+        ys, xs = np.indices(arr.shape)
+        cy = (ys * arr).sum() / total
+        cx = (xs * arr).sum() / total
+        shift_y = int(round(14 - cy))
+        shift_x = int(round(14 - cx))
+        arr = np.roll(arr, shift_y, axis=0)
+        arr = np.roll(arr, shift_x, axis=1)
+
     tensor = torch.tensor(arr).view(1, -1)
     return tensor
 

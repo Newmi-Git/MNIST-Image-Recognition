@@ -4,13 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Recognition</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Draw a Number</h1>
-    <canvas id="pad" width="280" height="280" style="border:1px solid black; background:black"></canvas><br>
+    <div class="heading">
+        <h1>Draw a Number</h1>
+    </div>
+    <div class="canvas">
+        <canvas id="pad" width="280" height="280" ></canvas><br>
+    
     <button onclick="clearCanvas()">Clear</button>
-
-    <h3 id="result">Prediction: -</h3>
+    </div>
+    <div class="dashboard">
+        <h3 id="result">Prediction: -</h3>
+    </div>
 
     <script src="/static/script.js"></script>
 </body>
