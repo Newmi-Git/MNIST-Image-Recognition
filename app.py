@@ -13,7 +13,7 @@ from model import ImageRecog
 app = FastAPI()
 
 model = ImageRecog()
-model.load_state_dict(torch.load("model.pt", map_location="cpu"))
+model.load_state_dict(torch.load("model_weights.pth", map_location="cpu"))
 model.eval()
 
 class ImagePayload(BaseModel):
@@ -21,10 +21,19 @@ class ImagePayload(BaseModel):
 
 def preprocess(image):
     image = image.convert("L")
-    image = ImageOps.invert(image)
-    image = image.resize((28,28))
-    #normalizing the image values
-    arr = np.array(image, dtype=np.float32) / 255.
+
+    bbox = image.getbbox()
+    if bbox:
+        image = image.crop(bbox)
+
+    w, h = image.size
+    size = max(w, h)
+    padded = Image.new("L", (size, size), 0)
+    padded.paste(image, ((size - w) // 2, (size - h) // 2))
+
+    image = padded.resize((28, 28))
+
+    arr = np.array(image, dtype=np.float32) / 255.0
     tensor = torch.tensor(arr).view(1, -1)
     return tensor
 
@@ -43,4 +52,8 @@ def predict(payload:ImagePayload):
         "probabilities": probs.tolist()
     }
 
-app.mount("/static", StaticFiles(directory="server"))
+app.mount("/static", StaticFiles(directory="server"), name="static")
+
+@app.get("/")
+def index():
+    return FileResponse("server/index.html")
