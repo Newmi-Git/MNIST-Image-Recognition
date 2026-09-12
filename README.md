@@ -2,8 +2,6 @@
 
 A neural network trained on the MNIST dataset, served through a live web interface — draw a digit in the browser and get a real-time prediction.
 
-![demo](demo.gif)
-
 ## How it works
 
 - A simple feedforward neural network (`model.py`) is trained on the MNIST dataset (`mnist_train.py`) and saved to `model_weights.pth`.
