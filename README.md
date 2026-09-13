@@ -1,6 +1,6 @@
 # MNIST-Image-Recognition
 
-A neural network trained on the MNIST dataset, served through a live web interface — draw a digit in the browser and get a real-time prediction.
+A neural network trained on the MNIST dataset, served through a live web interface. Draw a digit in the browser and get a real-time prediction.
 
 ## How it works
 
@@ -14,7 +14,7 @@ A neural network trained on the MNIST dataset, served through a live web interfa
 
 pip install -r requirements.txt
 
-2. Train the model (this generates `model_weights.pth`):
+2. Train the model (this generates `model_weights.pth`, this can be skipped since model weights have already been generated and loaded):
 
 python mnist_train.py
 
@@ -32,6 +32,4 @@ uvicorn app:app --reload
 
 ## Notes
 
-- The model is trained on the standard MNIST dataset (28x28, centered digits), so the preprocessing step crops and centers whatever the user draws before it reaches the model — this matters more than people expect for accuracy on freehand input.
-
-Swap demo.gif for an actual short clip or screenshot once you have one — or delete that line if you don't want to bother making a GIF.
+- The model is trained on the standard MNIST dataset (28x28, centered digits), so the preprocessing step crops and centers whatever the user draws before it reaches the model, this matters more than people expect for accuracy on freehand input.
